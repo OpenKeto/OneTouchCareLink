@@ -1,6 +1,3 @@
 # OneTouchCareLink
 
-OneTouch Glucose Meters
-Medtronics CareLink website
-
-Post Processing Software
+Post Processing Software for OneTouch Glucose Meters plus Medtronics CareLink website.
