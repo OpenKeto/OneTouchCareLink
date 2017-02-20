@@ -196,15 +196,16 @@ class processPump:
 					totalCarbs = float(row[23])
 					lastDate = currentDate
 					totalSamples = 1
-		carbsRow.append(lastDate)
-		carbsRow.append(totalCarbs)
-		carbsList.append(carbsRow)
-		outPumpList = pumpFileName[0:-4]
-		outPumpList += '_Carbs.csv'
-		outCSVFile = open(outPumpList, 'wb')
-		outwriter = csv.writer(outCSVFile, delimiter=',')
-		outwriter.writerows(carbsList)
-		return True		
+		if totalSamples > 0:
+			carbsRow.append(lastDate)
+			carbsRow.append(totalCarbs)
+			carbsList.append(carbsRow)
+			outPumpList = pumpFileName[0:-4]
+			outPumpList += '_Carbs.csv'
+			outCSVFile = open(outPumpList, 'wb')
+			outwriter = csv.writer(outCSVFile, delimiter=',')
+			outwriter.writerows(carbsList)
+			return True		
 		
 	def checkPumpFileHeader(self,entirePumpList):
 		"""
@@ -225,13 +226,13 @@ class processPump:
 			print 'First line of pump header mismatched'
 			return False
 		expectedHeader = ['Index','Date','Time','Timestamp','New Device Time','BG Reading (mg/dL)','Linked BG Meter ID','Temp Basal Amount (U/h)','Temp Basal Type','Temp Basal Duration (hh:mm:ss)','Bolus Type','Bolus Volume Selected (U)','Bolus Volume Delivered (U)','Bolus Duration (hh:mm:ss)','Prime Type','Prime Volume Delivered (U)','Suspend','Rewind','BWZ Estimate (U)','BWZ Target High BG (mg/dL)','BWZ Target Low BG (mg/dL)','BWZ Carb Ratio (grams)','BWZ Insulin Sensitivity (mg/dL)','BWZ Carb Input (grams)','BWZ BG Input (mg/dL)','BWZ Correction Estimate (U)','BWZ Food Estimate (U)','BWZ Active Insulin (U)','Alarm','Sensor Calibration BG (mg/dL)','Sensor Glucose (mg/dL)','ISIG Value','Daily Insulin Total (U)','Raw-Type','Raw-Values','Raw-ID','Raw-Upload ID','Raw-Seq Num','Raw-Device Type']
-		if entirePumpList[11] != expectedHeader:
+		if entirePumpList[9] != expectedHeader:
 			print 'Column header mismatched, expected'
 			print expectedHeader
 			print 'got header'
-			print entirePumpList[111]
+			print entirePumpList[9]
 			offset = 0
-			for cell in entirePumpList[11]:
+			for cell in entirePumpList[9]:
 				if cell != expectedHeader[offset]:
 					print 'expected',expectedHeader[offset],'got',cell
 				offset += 1
@@ -252,9 +253,9 @@ class processPump:
 		newPumpList = self.readPumpData(pumpFileName)
 		if not self.checkPumpFileHeader(newPumpList):
 			return False
-		self.goThruInsulinData(newPumpList[12:],pumpFileName)
-		self.goThruGlucoseData(newPumpList[12:],pumpFileName)
-		self.goThruCarbsData(newPumpList[12:],pumpFileName)
+		self.goThruInsulinData(newPumpList[10:],pumpFileName)
+		self.goThruGlucoseData(newPumpList[10:],pumpFileName)
+		self.goThruCarbsData(newPumpList[10:],pumpFileName)
 		return True
 	
 class UIManager:
